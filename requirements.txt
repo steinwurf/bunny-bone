@@ -1,0 +1,4 @@
+dbus-python==1.2.8
+pycairo==1.17.0
+PyGObject==3.28.3
+gatt==0.2.7

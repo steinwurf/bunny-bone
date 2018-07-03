@@ -1,0 +1,4 @@
+__pycache__
+bluetooth/
+.vscode
+start.sh

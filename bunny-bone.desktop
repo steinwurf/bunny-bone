@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Bunny Bone
+Exec=/home/bunny/bunny-bone/start.sh
+Icon=/home/bunny/bunny-bone/icon.png
+Terminal=true
+Type=Application
