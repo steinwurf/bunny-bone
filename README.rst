@@ -12,14 +12,17 @@ The project is very specialized but may be a good example for working with BLE.
 Setup bunny bone python application
 -----------------------------------
 
-1. Clone the project::
+Disclaimer: The bunny bone python application will only run on Linux, and has
+only been run on Ubuntu 18.04.
 
-    git clone https://github.com/steinwurf/bunny-bone
-
-2. Install the dependencies::
+1. Install the dependencies::
 
     sudo apt-get update
-    sudo apt-get install virtualenv python3-pip libdbus-1-dev libglib2.0-dev libgirepository1.0-dev libcairo2-dev
+    sudo apt-get install virtualenv python3-pip libdbus-1-dev libglib2.0-dev libgirepository1.0-dev libcairo2-dev git
+
+2. Clone the project::
+
+    git clone https://github.com/steinwurf/bunny-bone
 
 
 3. Setup the virtual environment::
