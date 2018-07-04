@@ -3,6 +3,7 @@ import curses
 import time
 import threading
 import os
+import time
 
 class CSVResultWriter(object):
 
@@ -13,5 +14,9 @@ class CSVResultWriter(object):
         output_file = os.path.expanduser(self.output_files[alias])
         with open(output_file, 'a') as f:
             if f.tell() == 0:
-                f.write('Time,Reading\n')
-            f.write('{},{}\n'.format(data["time"], data["value"]))
+                f.write('Time,Reading,Received\n')
+            received = time.strftime("%b %d %Y %H:%M:%S")
+            f.write('{},{},{}\n'.format(
+                data["time"],
+                data["value"],
+                received))
