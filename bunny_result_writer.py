@@ -1,10 +1,9 @@
 #!/usr/bin/python
 import curses
-import time
-import threading
-import os
-import time
 import datetime
+import os
+import threading
+import time
 
 class CSVResultWriter(object):
 
@@ -18,15 +17,12 @@ class CSVResultWriter(object):
                 f.write('Time,Reading\n')
 
             send_time = datetime.timedelta(milliseconds=data['send_time'])
-            read_time = datetime.timedelta(milliseconds=data["time"])
+            read_time = datetime.timedelta(milliseconds=data["read_time"])
 
             device_start_time = datetime.datetime.now() - send_time
-            abs_read_time = device_start_time + read_time
+            absolut_read_time = device_start_time + read_time
 
-            f.write('{},{}, DBUG: {}, {}, {}\n'.format(
-                data["value"],
-                abs_read_time.strftime("%Y-%m-%d %H:%M:%S"),
-                send_time,
-                read_time,
-                data
+            f.write('{},{}\n'.format(
+                absolut_read_time.strftime("%Y-%m-%d %H:%M:%S"),
+                data["value"]
             ))

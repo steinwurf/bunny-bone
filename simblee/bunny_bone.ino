@@ -36,7 +36,7 @@ struct reading
 }
 
 /// The time to sleep between each reading
-const int sleep_interval = MILLISECONDS(15000);
+const int sleep_interval = SECONDS(15);
 
 /// The number of readings to buffer before overwriting the oldest.
 const int max_buffered_readings = 2000; // ~8 hours of buffer
