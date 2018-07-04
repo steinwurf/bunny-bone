@@ -49,7 +49,7 @@ void setup() {
   SimbleeBLE.deviceName = "Bunny_1";
   SimbleeBLE.advertisementData = "data";
   SimbleeBLE.advertisementInterval = MILLISECONDS(1500);
-  SimbleeBLE.txPowerLevel = -20;  // (-20dbM to +4 dBm)
+  SimbleeBLE.txPowerLevel = -12;  // (-20dbM to +4 dBm)
   SimbleeBLE.customUUID = "2220";
   SimbleeBLE.begin();
 
