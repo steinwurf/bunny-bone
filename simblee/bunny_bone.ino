@@ -36,13 +36,13 @@ struct reading
 }
 
 /// The time to sleep between each reading
-const int sleep_interval = MILLISECONDS(15000);
+const int sleep_interval = SECONDS(15);
 
 /// The number of readings to buffer before overwriting the oldest.
 const int max_buffered_readings = 2000; // ~8 hours of buffer
 
 CircularBuffer<bunny_bone::reading, max_buffered_readings> buffered_readings;
-uint8_t send_buffer[6];
+uint8_t send_buffer[10];
 bool connected = false;
 
 void setup() {
@@ -123,7 +123,13 @@ bunny_bone::reading read_data()
 
 bool send(const bunny_bone::reading& reading)
 {
-  memcpy(send_buffer, &reading.m_time, sizeof(bunny_bone::reading::m_time));
-  memcpy(send_buffer + sizeof(bunny_bone::reading::m_time), &reading.m_reading, sizeof(bunny_bone::reading::m_reading));
-  return SimbleeBLE.send((char*)send_buffer, 6);
+  auto offset = 0;
+  memcpy(send_buffer + offset, &reading.m_time, sizeof(bunny_bone::reading::m_time));
+  offset += sizeof(bunny_bone::reading::m_time);
+  memcpy(send_buffer + offset, &reading.m_reading, sizeof(bunny_bone::reading::m_reading));
+  offset += sizeof(bunny_bone::reading::m_reading);
+  uint32_t send_time = millis();
+  memcpy(send_buffer + offset, &send_time, sizeof(send_time));
+
+  return SimbleeBLE.send((char*)send_buffer, 10);
 }
