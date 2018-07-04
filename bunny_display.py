@@ -27,6 +27,7 @@ class Display(object):
     def handle_data(self, alias, data):
         self.devices[alias]['results'] += 1
         self.devices[alias]['lastRecived'] = time.strftime("%H:%M:%S")
+        self.devices[alias]['lastResult'] = data['value']
         self.refresh()
 
     def refresh(self):
