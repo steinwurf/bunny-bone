@@ -1,6 +1,6 @@
 Bunny Bone
 ==========
-.. image:: https://raw.githubusercontent.com/steinwurf/bunny-bone/master/icon.png
+.. image:: ./icon.png
 
 This project contains the Arduino (Simblee) code for a data collector which uses
 Bluetooth Low Energy (BLE) to communicate readings from a sensor.
