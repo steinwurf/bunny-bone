@@ -43,15 +43,18 @@ class MyDevice(gatt.Device):
         super().characteristic_value_updated(characteristic, value)
         read_time_value = value[:4]
         reading_value = value[4:6]
-        send_time_value = value[6:]
+        send_time_value = value[6:10]
+        sequence_number_value = value[10:]
         read_time = int.from_bytes(read_time_value, byteorder='little', signed=False)
         reading = int.from_bytes(reading_value, byteorder='little', signed=True)
         send_time = int.from_bytes(send_time_value, byteorder='little', signed=False)
+        sequence_number = int.from_bytes(sequence_number_value, byteorder='little', signed=False)
 
         self.on_data_received({
             'read_time': read_time,
             'value': reading,
-            "send_time": send_time
+            "send_time": send_time,
+            "sequence_number": sequence_number,
         })
 
 

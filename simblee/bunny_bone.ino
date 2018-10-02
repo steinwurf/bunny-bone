@@ -12,7 +12,9 @@
 
 #ifdef HAS_HX711
 #include "HX711.h"
-HX711 scale;
+HX711 hx711;
+const float scale = 603.851f;
+const long offset = 8678;
 #endif
 
 #ifdef DEBUG
@@ -22,7 +24,6 @@ HX711 scale;
   #define DEBUG_PRINT(...)
   #define DEBUG_PRINTLN(...)
 #endif
-
 
 namespace bunny_bone
 {
@@ -36,13 +37,14 @@ struct reading
 }
 
 /// The time to sleep between each reading
-const int sleep_interval = SECONDS(15);
+const int sleep_interval_ms = SECONDS(15);
 
 /// The number of readings to buffer before overwriting the oldest.
 const int max_buffered_readings = 2000; // ~8 hours of buffer
 
+uint32_t sequence_number = 0;
 CircularBuffer<bunny_bone::reading, max_buffered_readings> buffered_readings;
-uint8_t send_buffer[10];
+uint8_t send_buffer[14];
 bool connected = false;
 
 void setup() {
@@ -55,11 +57,9 @@ void setup() {
 
 
 #ifdef HAS_HX711
-  // Sleep for some time before calling tare.
-  Simblee_ULPDelay(SECONDS(5));
-  scale.begin(2,3);    // parameter "gain" is ommited; the default value 128 is used by the library
-  scale.set_scale(603.851f);
-  scale.tare();
+  hx711.begin(2,3); // parameter "gain" is ommited; the default value 128 is used by the library
+  hx711.set_scale(scale);
+  hx711.set_offset(offset * hx711.get_scale());
 #endif
 
 #ifdef DEBUG
@@ -67,7 +67,7 @@ void setup() {
 #endif
   DEBUG_PRINTLN("Started");
   DEBUG_PRINT("Buffer can store ");
-  DEBUG_PRINT((max_buffered_readings * sleep_interval) * 0.000000277778f);
+  DEBUG_PRINT((max_buffered_readings * sleep_interval_ms) * 0.000000277778f);
   DEBUG_PRINTLN(" Hours.");
 }
 
@@ -82,27 +82,32 @@ void SimbleeBLE_onDisconnect(){
 }
 
 void loop() {
+
+  auto time_to_sleep_ms = sleep_interval_ms;
+  auto before_ms = millis();
+
   // Always buffer readings
   buffered_readings.push(read_data());
-  if (connected)
-  {
-    // Send as much as possible
-    while(!buffered_readings.isEmpty())
-    {
-      auto reading = buffered_readings.first();
-      if (!send(reading))
-      {
-        DEBUG_PRINT(buffered_readings.size());
-        DEBUG_PRINT(" readings still in buffer. But network is unavailable -");
-        DEBUG_PRINTLN(" trying again later..");
-        break;
-      }
-      /// If the reading was sent successfully - remove it from buffer
-      buffered_readings.shift();
-    }
-  }
 
-  Simblee_ULPDelay(sleep_interval);
+  // Send as much as possible
+  while(connected && !buffered_readings.isEmpty())
+  {
+    auto reading = buffered_readings.first();
+    if (!send(reading))
+    {
+      DEBUG_PRINT(buffered_readings.size());
+      DEBUG_PRINT(" readings still in buffer. But network is unavailable -");
+      DEBUG_PRINTLN(" trying again later..");
+      break;
+    }
+    /// If the reading was sent successfully - remove it from buffer
+    buffered_readings.shift();
+  }
+  auto time_spent = (millis() - before_ms);
+  if (time_spent < time_to_sleep_ms)
+  {
+    Simblee_ULPDelay(time_to_sleep_ms - time_spent);
+  }
 }
 
 bunny_bone::reading read_data()
@@ -111,14 +116,16 @@ bunny_bone::reading read_data()
   int16_t result = (int16_t)Simblee_temperature(CELSIUS);
 #endif
 #ifdef HAS_HX711
-  scale.power_up();
-  scale.get_units(1);
-  int16_t result = (int16_t)scale.get_units(1);
-
-  scale.power_down();
+  hx711.power_up();
+  int16_t result = (int16_t)hx711.get_units(1);
+  hx711.power_down();
 #endif
-  DEBUG_PRINTLN(result);
-  return { millis(), result };
+  bunny_bone::reading reading = { millis(), result };
+  DEBUG_PRINT("time: ");
+  DEBUG_PRINT(reading.m_time);
+  DEBUG_PRINT("ms - ");
+  DEBUG_PRINTLN(reading.m_reading);
+  return reading;
 }
 
 bool send(const bunny_bone::reading& reading)
@@ -130,6 +137,12 @@ bool send(const bunny_bone::reading& reading)
   offset += sizeof(bunny_bone::reading::m_reading);
   uint32_t send_time = millis();
   memcpy(send_buffer + offset, &send_time, sizeof(send_time));
-
-  return SimbleeBLE.send((char*)send_buffer, 10);
+  offset += sizeof(send_time);
+  memcpy(send_buffer + offset, &sequence_number, sizeof(sequence_number));
+  auto result = SimbleeBLE.send((char*)send_buffer, sizeof(send_buffer));
+  if (result)
+  {
+    sequence_number++;
+  }
+  return result;
 }

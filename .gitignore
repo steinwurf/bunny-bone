@@ -2,3 +2,4 @@ __pycache__
 bluetooth/
 .vscode
 start.sh
+bunny_bone.log

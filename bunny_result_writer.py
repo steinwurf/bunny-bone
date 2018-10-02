@@ -4,6 +4,7 @@ import datetime
 import os
 import threading
 import time
+import logging
 
 class CSVResultWriter(object):
 
@@ -11,18 +12,25 @@ class CSVResultWriter(object):
         self.output_files = output_files
 
     def handle_data(self, alias, data):
+        now = datetime.datetime.now()
         output_file = os.path.expanduser(self.output_files[alias])
         with open(output_file, 'a') as f:
             if f.tell() == 0:
-                f.write('Time,Reading\n')
+                f.write('Read Time,Send Time,Now,Time,Reading,Sequence Number\n')
 
             send_time = datetime.timedelta(milliseconds=data['send_time'])
             read_time = datetime.timedelta(milliseconds=data["read_time"])
 
-            device_start_time = datetime.datetime.now() - send_time
+            device_start_time = now - send_time
             absolut_read_time = device_start_time + read_time
 
-            f.write('{},{}\n'.format(
-                absolut_read_time.strftime("%Y-%m-%d %H:%M:%S"),
-                data["value"]
+            f.write('{read_time},{send_time},{now},{time},{reading},{sequence_number}\n'.format(
+                read_time=data['read_time'],
+                send_time=data['send_time'],
+                now=int(round(now.timestamp() * 1000)),
+                time=absolut_read_time.strftime("%Y-%m-%d %H:%M:%S"),
+                reading=data["value"],
+                sequence_number=data["sequence_number"]
             ))
+            logging.debug('Got data from {} which was powered at {}'.format(alias, device_start_time))
+
