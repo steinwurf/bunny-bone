@@ -8,7 +8,6 @@ from bunny_display import Display
 from bunny_result_writer import CSVResultWriter
 
 def main():
-
     logging.basicConfig(format='%(asctime)s %(message)s', filename='bunny_bone.log',level=logging.DEBUG)
 
     parser = argparse.ArgumentParser(description='Bunny Bone Reciever.')

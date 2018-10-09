@@ -20,7 +20,7 @@ class MyDevice(gatt.Device):
         super().connect_succeeded()
 
     def connect_failed(self, error):
-        self.on_device_updated('Connection Failed')
+        self.on_device_updated('Connect Failed')
         super().connect_failed(error)
 
     def disconnect_succeeded(self):

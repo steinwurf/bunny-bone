@@ -9,7 +9,7 @@ readings are received and written to a file.
 
 The project is very specialized but may be a good example for working with BLE.
 
-Setup bunny bone python application
+Setup Bunny Bone Python Application
 -----------------------------------
 
 Disclaimer: The bunny bone python application will only run on Linux, and has
@@ -32,7 +32,7 @@ only been run on Ubuntu 18.04.
     source bluetooth/bin/activate
     pip3 install -r requirements.txt
 
-Install the bunny bone desktop launcher
+Install Bunny Bone Desktop Launcher
 ---------------------------------------
 
 Run the following command to install the desktop shortcut and result directory::
@@ -50,11 +50,11 @@ Configuration File
 If you need to configure the python application, you can do so by changing the
 `conf.cfg` file.
 
-The configuration file consists of various sections.
+The configuration file consists of the following sections.
 
-DEFAULT section
+DEFAULT Section
 ...............
-The DEFAULT section specifies the adapter name to use. This is the adapter name
+The `DEFAULT` section specifies the adapter name to use. This is the adapter name
 of the bluetooth device you want to use. You can use this command to get the
 name::
 
@@ -65,25 +65,46 @@ Example output::
     Devices:
         hci0	00:1C:DE:07:4D:30
 
-Here the name is hci0.
+Here the name is `hci0`.
 
 Sensor Sections
 ...............
-Following the DEFAULT section is a set of one or more sensor sections.
+Following the `DEFAULT` section is a set of one or more sensor sections.
 The name of each section is the name of the device which we want to read from.
-Each sensor section contains an attribute called OutputFile which is the file
+Each sensor section contains an attribute called `OutputFile` which is the file
 which will used to store the results for that sensor.
 
 Please restart the application for the applied changes to take effect.
+
+Usage
+-----
+Once the python application is running it will wait for connections from one of the devices specified in the configuration file.
+This is a screenshot showing the layout:
+
+.. image:: ./screenshot.png
+
+Each device has a row in the table, and each row has the following columns:
+
+* `Name` - The is the name of the device.
+* `Status` - This is the connection status of the device.
+* `Reading Count` - This is the number of readings read from the device. This value will be reset if the application is closed.
+* `Last Value` - This is the value of the last reading received.
+* `Read` - This is the time at which the most recently received reading was read.
+* `Received` - This is the time at which the most recently received reading was received.
+* `Buffered` - This value is an approximation of the number of readings buffered on the device.
 
 Simblee
 -------
 The Arduino code is made for the Simblee board.
 
+Board config is available from this url::
+
+    https://www.simblee.com/package_simblee166_index.json
+
 Library requirements:
 
-1. CircularBuffer library from Library Manager.
-2. HX711 library from github: https://github.com/bogde/HX711
+1. `CircularBuffer` library from Library Manager.
+2. `HX711` library from github: https://github.com/bogde/HX711
 
 Description of data
 -------------------
@@ -92,11 +113,11 @@ specified output file.
 The readings stored as a comma separated file (csv). Such files are supported
 by many spreadsheet applications such as Microsoft Excel or Google Sheets.
 
-The Simblees notion of time is based of when it was powered on.
+The Simblee's notion of time is based of when it was powered on.
 This means that it's not possible for the Simblee to know the absolute time of a
-reading. Instead it transmit the time it took the reading and the time it send
-it to the python script. Using this information and the computer's clock it's
-possible to convert the Simblee's timestamp to an absolute time.
+reading. Instead it transmits both the time of the reading and the time it sent
+the reading to the python application. Using this information, and the computer's clock,
+it's possible to convert the Simblee's relative timestamp to an absolute one.
 
 The following information is stored for each reading:
 

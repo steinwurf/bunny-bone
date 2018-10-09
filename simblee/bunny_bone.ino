@@ -10,11 +10,39 @@
 /// Defines whether to enable debug (and serial communication or not)
 // #define DEBUG
 
+/////////////////////////
+///     Constants     ///
+/////////////////////////
+
+/// The name of the device
+const std::string device_name = "B1";
+
+/// The transmission power level. Value must be between -20dbM to +4 dBm.
+const int txPowerLevel = 4;
+
+/// The time to sleep between each reading
+const int sleep_interval_ms = SECONDS(15);
+
+/// The number of readings to buffer before overwriting the oldest.
+/// If this is too large, not enough space is available on the device.
+const int max_buffered_readings = 2000; // ~8 hours of buffer
+
+/// Only relevant when suing the HX711
+#ifdef HAS_HX711
+/// The scale - device specific
+const float scale = 603.851f;
+
+/// The offset in gram - this is used instead of tare to make sure weight it consistent between reboots.
+const long offset = 8678;
+#endif
+
+/////////////////////
+///     Logic     ///
+/////////////////////
+
 #ifdef HAS_HX711
 #include "HX711.h"
 HX711 hx711;
-const float scale = 603.851f;
-const long offset = 8678;
 #endif
 
 #ifdef DEBUG
@@ -36,22 +64,16 @@ struct reading
 };
 }
 
-/// The time to sleep between each reading
-const int sleep_interval_ms = SECONDS(15);
-
-/// The number of readings to buffer before overwriting the oldest.
-const int max_buffered_readings = 2000; // ~8 hours of buffer
-
 uint32_t sequence_number = 0;
 CircularBuffer<bunny_bone::reading, max_buffered_readings> buffered_readings;
 uint8_t send_buffer[14];
 bool connected = false;
 
 void setup() {
-  SimbleeBLE.deviceName = "Bunny_1";
-  SimbleeBLE.advertisementData = "data";
+  SimbleeBLE.deviceName = device_name.c_str();
+  SimbleeBLE.advertisementData = "";
   SimbleeBLE.advertisementInterval = MILLISECONDS(1500);
-  SimbleeBLE.txPowerLevel = -8;  // (-20dbM to +4 dBm)
+  SimbleeBLE.txPowerLevel = txPowerLevel;  // (-20dbM to +4 dBm)
   SimbleeBLE.customUUID = "2220";
   SimbleeBLE.begin();
 

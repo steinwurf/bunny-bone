@@ -14,6 +14,7 @@ class CSVResultWriter(object):
     def handle_data(self, alias, data):
         now = datetime.datetime.now()
         output_file = os.path.expanduser(self.output_files[alias])
+        os.makedirs(os.path.dirname(output_file), exist_ok=True)
         with open(output_file, 'a') as f:
             if f.tell() == 0:
                 f.write('Read Time,Send Time,Now,Time,Reading,Sequence Number\n')
