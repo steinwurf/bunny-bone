@@ -15,7 +15,7 @@
 /////////////////////////
 
 /// The name of the device
-const std::string device_name = "B1";
+const std::string device_name = "B3";
 
 /// The transmission power level. Value must be between -20dbM to +4 dBm.
 const int txPowerLevel = 4;
@@ -30,10 +30,11 @@ const int max_buffered_readings = 2000; // ~8 hours of buffer
 /// Only relevant when suing the HX711
 #ifdef HAS_HX711
 /// The scale - device specific
-const float scale = 603.851f;
+const float scale = 589.258653846153833f;
 
-/// The offset in gram - this is used instead of tare to make sure weight it consistent between reboots.
-const long offset = 8678;
+/// The offset - device specific 
+/// this is used instead of tare to make sure weight it consistent between reboots. 
+const long offset = 2173568;
 #endif
 
 /////////////////////
@@ -73,15 +74,14 @@ void setup() {
   SimbleeBLE.deviceName = device_name.c_str();
   SimbleeBLE.advertisementData = "";
   SimbleeBLE.advertisementInterval = MILLISECONDS(1500);
-  SimbleeBLE.txPowerLevel = txPowerLevel;  // (-20dbM to +4 dBm)
+  SimbleeBLE.txPowerLevel = txPowerLevel; // (-20dbM to +4 dBm)
   SimbleeBLE.customUUID = "2220";
   SimbleeBLE.begin();
-
 
 #ifdef HAS_HX711
   hx711.begin(2,3); // parameter "gain" is ommited; the default value 128 is used by the library
   hx711.set_scale(scale);
-  hx711.set_offset(offset * hx711.get_scale());
+  hx711.set_offset(offset);
 #endif
 
 #ifdef DEBUG
