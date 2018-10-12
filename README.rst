@@ -9,6 +9,23 @@ readings are received and written to a file.
 
 The project is very specialized but may be a good example for working with BLE.
 
+Usage
+-----
+Once the python application is running it will wait for connections from one of the devices specified in the configuration file.
+This is a screenshot showing the layout:
+
+.. image:: ./screenshot.png
+
+Each device has a row in the table, and each row has the following columns:
+
+* `Name` - The is the name of the device.
+* `Status` - This is the connection status of the device.
+* `Reading Count` - This is the number of readings read from the device. This value will be reset if the application is closed.
+* `Last Value` - This is the value of the last reading received.
+* `Read` - This is the time at which the most recently received reading was read.
+* `Received` - This is the time at which the most recently received reading was received.
+* `Buffered` - This value is an approximation of the number of readings buffered on the device.
+
 Setup Bunny Bone Python Application
 -----------------------------------
 
@@ -76,23 +93,6 @@ which will used to store the results for that sensor.
 
 Please restart the application for the applied changes to take effect.
 
-Usage
------
-Once the python application is running it will wait for connections from one of the devices specified in the configuration file.
-This is a screenshot showing the layout:
-
-.. image:: ./screenshot.png
-
-Each device has a row in the table, and each row has the following columns:
-
-* `Name` - The is the name of the device.
-* `Status` - This is the connection status of the device.
-* `Reading Count` - This is the number of readings read from the device. This value will be reset if the application is closed.
-* `Last Value` - This is the value of the last reading received.
-* `Read` - This is the time at which the most recently received reading was read.
-* `Received` - This is the time at which the most recently received reading was received.
-* `Buffered` - This value is an approximation of the number of readings buffered on the device.
-
 Simblee
 -------
 The Arduino code is made for the Simblee board.
@@ -104,7 +104,7 @@ Board config is available from this url::
 Library requirements:
 
 1. `CircularBuffer` library from Library Manager.
-2. `HX711` library from github: https://github.com/bogde/HX711 
+2. `HX711` library from github: https://github.com/bogde/HX711
 
 Description of data
 -------------------
