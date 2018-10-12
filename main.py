@@ -10,7 +10,7 @@ from bunny_result_writer import CSVResultWriter
 def main():
     logging.basicConfig(format='%(asctime)s %(message)s', filename='bunny_bone.log',level=logging.DEBUG)
 
-    parser = argparse.ArgumentParser(description='Bunny Bone Reciever.')
+    parser = argparse.ArgumentParser(description='Bunny Bone Receiver.')
     parser.add_argument(
         'config',
         type=argparse.FileType('r'),

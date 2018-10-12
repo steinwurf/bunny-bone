@@ -55,7 +55,7 @@ The configuration file consists of the following sections.
 DEFAULT Section
 ...............
 The `DEFAULT` section specifies the adapter name to use. This is the adapter name
-of the bluetooth device you want to use. You can use this command to get the
+of the Bluetooth device you want to use. You can use this command to get the
 name::
 
     hcitool dev
@@ -104,7 +104,7 @@ Board config is available from this url::
 Library requirements:
 
 1. `CircularBuffer` library from Library Manager.
-2. `HX711` library from github: https://github.com/bogde/HX711
+2. `HX711` library from github: https://github.com/bogde/HX711 
 
 Description of data
 -------------------
@@ -133,7 +133,7 @@ The following information is stored for each reading:
   with ~4000 readings 5 spikes occurred.
 * `Sequence Number` a value incrementing with each reading. Can be useful for
   determining if a reading was somehow lost.
-  Note: this value will reset when the power to the arduino is cut.
+  Note: this value will reset when the power to the Simblee is cut.
 
 So all in all if you only need to work with absolute timestamps and the readings
 you can just use the `Time` and `Reading` values.

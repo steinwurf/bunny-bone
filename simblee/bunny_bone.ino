@@ -30,10 +30,10 @@ const int max_buffered_readings = 2000; // ~8 hours of buffer
 /// Only relevant when suing the HX711
 #ifdef HAS_HX711
 /// The scale - device specific
-const float scale = 589.258653846153833f;
+const float scales = 589.258653846153833f;
 
-/// The offset - device specific 
-/// this is used instead of tare to make sure weight it consistent between reboots. 
+/// The offset - device specific
+/// this is used instead of tare to make sure weight it consistent between reboots.
 const long offset = 2173568;
 #endif
 
@@ -79,7 +79,7 @@ void setup() {
   SimbleeBLE.begin();
 
 #ifdef HAS_HX711
-  hx711.begin(2,3); // parameter "gain" is ommited; the default value 128 is used by the library
+  hx711.begin(2,3); // parameter "gain" is omitted; the default value 128 is used by the library
   hx711.set_scale(scale);
   hx711.set_offset(offset);
 #endif
