@@ -7,7 +7,7 @@ Bluetooth Low Energy (BLE) to communicate readings from a sensor.
 Using the python library `gatt <https://github.com/getsenic/gatt-python>`_ the
 readings are received and written to a file.
 
-The project is very specialized but may be a good example for working with BLE.
+The project is very specialized but may be a good example for working with BLE, Simblee, and Python.
 
 Usage
 -----
