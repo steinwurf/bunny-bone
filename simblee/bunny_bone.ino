@@ -30,7 +30,7 @@ const int max_buffered_readings = 2000; // ~8 hours of buffer
 /// Only relevant when suing the HX711
 #ifdef HAS_HX711
 /// The scale - device specific
-const float scales = 589.258653846153833f;
+const float scale = 589.258653846153833f;
 
 /// The offset - device specific
 /// this is used instead of tare to make sure weight it consistent between reboots.
