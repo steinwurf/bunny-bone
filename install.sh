@@ -13,8 +13,7 @@ echo "python3 $BASEDIR/main.py $BASEDIR//conf.cfg" >> ./start.sh
 echo "sleep 3" >> ./start.sh
 chmod +x ./start.sh
 
-
-echo "Creating desktop entry.."
+echo "Creating desktop entry"
 echo "[Desktop Entry]" > ~/Desktop/bunny-bone.desktop
 echo "Name=Bunny Bone" >> ~/Desktop/bunny-bone.desktop
 echo "Exec=$BASEDIR/start.sh" >> ~/Desktop/bunny-bone.desktop
@@ -23,7 +22,5 @@ echo "Terminal=true" >> ~/Desktop/bunny-bone.desktop
 echo "Type=Application" >> ~/Desktop/bunny-bone.desktop
 
 chmod +x ~/Desktop/bunny-bone.desktop
-
-
 
 echo "Installation complete"
